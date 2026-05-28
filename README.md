@@ -10,10 +10,10 @@ A full-featured academic laboratory management web application built with **Next
 - **Project & task management** — Assign, track, and manage lab projects and individual tasks
 - **Personal task & assignment management** — Each member can manage their own to-do list and deadlines
 - **Academic board** — Manage lab staff, roster, and board members
-- **Interactive calendar** — Full multi‑week calendar with appointments, activities, and Zoom meeting integration
-- **Zoom meeting auto‑generation** — Automatically generate Zoom meeting links and passwords when booking meetings
+- **Interactive calendar** — Full multi-week calendar with appointments, activities, and Zoom meeting integration
+- **Zoom meeting auto-generation** — Automatically generate Zoom meeting links and passwords when booking meetings
 - **Account management** — Create and manage user accounts with role assignment
-- **Light / Dark theme** — Fully styled dual‑theme UI
+- **Light / Dark theme** — Fully styled dual-theme UI
 - **Responsive design** — Works across desktop and tablet screens
 
 ---
@@ -78,7 +78,7 @@ The easiest way to deploy is via **Vercel** (free tier available):
 4. Vercel will auto-detect Next.js settings — click **Deploy**.
 5. Your app will be live at `https://<your-project>.vercel.app`.
 
-Alternatively, you can deploy to **Netlify** or any Node.js‑capable host.
+Alternatively, you can deploy to **Netlify** or any Node.js-capable host.
 
 ---
 
