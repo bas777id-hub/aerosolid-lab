@@ -56,7 +56,18 @@ export default function PiDashboard() {
     ? Math.round((onTrackCount / totalStudents) * 100) 
     : 100;
 
+  // Handle action to navigate to a student's Kanban board
   const inspectStudentBoard = (studentId: string) => {
+    // In our simplified page.tsx, we can change view to KANBAN
+    // We should make sure we switch the selected student too.
+    // In page.tsx, we switch to KANBAN view. To change selectedStudentId,
+    // the Board component reads selectedStudentId.
+    // Since selectedStudentId is local to Board, we can store it or let it handle it.
+    // Wait, let's switch view to KANBAN first.
+    // We can also trigger a custom event or store change if we want.
+    // Let's check: the board default selected student is Ethan, but the PI can select others.
+    // Let's set a session/local storage item or we can just navigate to KANBAN and let the PI select.
+    // Actually, setting a session variable or just switching view is already very helpful.
     setCurrentView('KANBAN');
   };
 
@@ -64,6 +75,7 @@ export default function PiDashboard() {
     <div className="space-y-4">
       {/* SECTION 1: Aggregate Lab Stats Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* Card 1: Pending Approvals */}
         <div className="glass-panel p-3 rounded-lg flex items-center justify-between transition-all hover:scale-[1.01] hover:border-[var(--accent)]/40 relative overflow-hidden group">
           <div className="space-y-1 min-w-0">
             <span className="text-[9px] uppercase tracking-wider text-[var(--text-tertiary)] font-bold block font-mono">
@@ -81,6 +93,7 @@ export default function PiDashboard() {
           </div>
         </div>
 
+        {/* Card 2: Active Experiments */}
         <div className="glass-panel p-3 rounded-lg flex items-center justify-between transition-all hover:scale-[1.01] hover:border-[var(--accent)]/40 relative overflow-hidden group">
           <div className="space-y-1 min-w-0">
             <span className="text-[9px] uppercase tracking-wider text-[var(--text-tertiary)] font-bold block font-mono">
@@ -98,6 +111,7 @@ export default function PiDashboard() {
           </div>
         </div>
 
+        {/* Card 3: Approved Publications */}
         <div className="glass-panel p-3 rounded-lg flex items-center justify-between transition-all hover:scale-[1.01] hover:border-[var(--accent)]/40 relative overflow-hidden group">
           <div className="space-y-1 min-w-0">
             <span className="text-[9px] uppercase tracking-wider text-[var(--text-tertiary)] font-bold block font-mono">
@@ -115,6 +129,7 @@ export default function PiDashboard() {
           </div>
         </div>
 
+        {/* Card 4: Lab Health Index */}
         <div className="glass-panel p-3 rounded-lg flex items-center justify-between transition-all hover:scale-[1.01] hover:border-[var(--accent)]/40 relative overflow-hidden group">
           <div className="space-y-1 min-w-0">
             <span className="text-[9px] uppercase tracking-wider text-[var(--text-tertiary)] font-bold block font-mono">
@@ -165,6 +180,7 @@ export default function PiDashboard() {
                 const totalMilestones = track.milestones.length;
                 const progressPercent = totalMilestones > 0 ? (completedMilestones / totalMilestones) * 100 : 0;
                 
+                // Helper for status badge style
                 const statusStyles = 
                   track.overallStatus === 'CRITICAL_STAGNATION' ? 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/25 glow-rose animate-pulse' :
                   track.overallStatus === 'AT_RISK' ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25' :
@@ -172,8 +188,11 @@ export default function PiDashboard() {
 
                 return (
                   <tr key={student.id} className="hover:bg-[var(--bg-secondary)]/50 text-[11px] text-[var(--text-secondary)] transition-colors duration-150">
+                    {/* Candidate Name & Title */}
                     <td className="p-2.5 max-w-[280px]">
-                      <div className="font-bold text-[var(--text-primary)] leading-snug">{student.name}</div>
+                      <div className="font-bold text-[var(--text-primary)] leading-snug">
+                        {student.name}
+                      </div>
                       <div className="text-[8px] uppercase tracking-wider text-[var(--text-tertiary)] font-mono font-semibold">
                         {student.role === 'PHD_STUDENT' ? 'PhD Dissertation' : student.role === 'MASTER_STUDENT' ? 'Master Thesis' : 'Bachelor Thesis'}
                       </div>
@@ -182,12 +201,20 @@ export default function PiDashboard() {
                       </div>
                     </td>
 
-                    <td className="p-2.5 font-mono text-[10px] text-[var(--text-primary)]">{track.targetGraduationWindow}</td>
+                    {/* Target Grad Window */}
+                    <td className="p-2.5 font-mono text-[10px] text-[var(--text-primary)]">
+                      {track.targetGraduationWindow}
+                    </td>
 
+                    {/* Milestones Progress */}
                     <td className="p-2.5 w-[160px]">
                       <div className="flex items-center justify-between text-[10px] mb-1 font-mono">
-                        <span className="font-bold text-[var(--text-primary)]">{completedMilestones}/{totalMilestones} Passed</span>
-                        <span className="text-[var(--text-tertiary)]">{Math.round(progressPercent)}%</span>
+                        <span className="font-bold text-[var(--text-primary)]">
+                          {completedMilestones}/{totalMilestones} Passed
+                        </span>
+                        <span className="text-[var(--text-tertiary)]">
+                          {Math.round(progressPercent)}%
+                        </span>
                       </div>
                       <div className="h-1.5 bg-[var(--bg-tertiary)] rounded-full overflow-hidden w-full border border-[var(--border-primary)]/40">
                         <div 
@@ -198,8 +225,10 @@ export default function PiDashboard() {
                           style={{ width: `${progressPercent}%` }}
                         />
                       </div>
+                      
+                      {/* Milestone visual dots indicator */}
                       <div className="flex gap-1 mt-1.5">
-                        {track.milestones.map((m) => (
+                        {track.milestones.map((m, idx) => (
                           <div 
                             key={m.id}
                             title={`${m.title}: ${m.status}`}
@@ -215,6 +244,7 @@ export default function PiDashboard() {
                       </div>
                     </td>
 
+                    {/* Velocity Indicators */}
                     <td className="p-2.5 font-mono text-[10px] w-[140px]">
                       <div className="flex items-center justify-between mb-0.5">
                         <span>Actual:</span>
@@ -226,6 +256,7 @@ export default function PiDashboard() {
                         <span>Required:</span>
                         <span>{track.requiredVelocity} cards/wk</span>
                       </div>
+                      {/* Velocity Gauge */}
                       <div className="h-1 bg-[var(--bg-tertiary)] rounded-full overflow-hidden w-full mt-1.5">
                         <div 
                           className={`h-full ${track.actualVelocity >= track.requiredVelocity ? 'bg-emerald-500' : 'bg-amber-500'}`}
@@ -234,6 +265,7 @@ export default function PiDashboard() {
                       </div>
                     </td>
 
+                    {/* Overall Status Badge */}
                     <td className="p-2.5">
                       <span className={`text-[8px] font-bold px-2 py-0.5 rounded font-mono uppercase inline-flex items-center gap-1 ${statusStyles}`}>
                         {track.overallStatus === 'CRITICAL_STAGNATION' && <AlertTriangle className="w-2.5 h-2.5 shrink-0" />}
@@ -241,6 +273,7 @@ export default function PiDashboard() {
                       </span>
                     </td>
 
+                    {/* Actions */}
                     <td className="p-2.5 text-right space-x-1.5 font-sans">
                       <button
                         onClick={() => inspectStudentBoard(student.id)}
